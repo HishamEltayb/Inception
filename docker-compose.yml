@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  mariadb:
+    build: ./.
+    image: testdb
+    container_name: testdb
+    ports:
+      - "3306:3306"  # Map container's 3306 port to host's 3306 port
+    env_file:
+      - ./srcs/.env
+    secrets:
+      - DB_PASSWORD
+      - DB_ROOT_PASSWORD
+    networks:
+      - inception_network
+    tty: true          # Like -t
+    stdin_open: true   # Like -i
+
+networks:
+  inception_network:
+    driver: bridge
+
+secrets:
+  DB_PASSWORD:
+    file: ./secrets/db_password.txt
+  DB_ROOT_PASSWORD:
+    file: ./secrets/db_root_password.txt

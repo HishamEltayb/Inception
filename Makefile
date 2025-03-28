@@ -1,22 +1,19 @@
+all: build up 
+
+up:
+	docker compose up -d
 
 build:
-	docker build -t testdb .
+	docker compose build
 
-run:
-	docker run -it --name testdb testdb
+down:
+	docker compose down
 
-clean:
-	-docker stop testdb
-	-docker rm testdb
+fclean: down
+	docker compose rm -v
 
-fclean:
-	-docker rmi testdb
-	
-down: clean fclean
+attach:
+	docker compose exec mariadb /bin/sh
 
-up: build run
+.PHONY: up build down fclean
 
-re: down up
-	
-	
-.PHONY: build run clean fclean down up re

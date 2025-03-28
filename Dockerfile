@@ -6,5 +6,11 @@ RUN apk add mariadb mariadb-client openrc
 
 RUN mkdir -p /run/openrc && touch /run/openrc/softlevel
 
+RUN openrc
 
-ENTRYPOINT [ "/bin/sh" ]
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+
+ENTRYPOINT [ "/entrypoint.sh" ]
