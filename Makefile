@@ -1,8 +1,10 @@
-all: build up 
+USER := $(shell whoami)
+
+all: build up logs
 
 up:
-	mkdir -p /Users/${USER}/goinfre/data/mariadb
-	mkdir -p /Users/${USER}/goinfre/data/wordpress
+	mkdir -p /home/${USER}/data/mariadb
+	mkdir -p /home/${USER}/data/wordpress
 	cd srcs && docker compose up -d 
 
 build:
@@ -25,8 +27,8 @@ attach-ng:
 
 clean: down
 	cd srcs && docker compose rm -v 
-	- rm -rf /Users/${USER}/goinfre/data/mariadb
-	- rm -rf /Users/${USER}/goinfre/data/wordpress
+	- rm -rf /home/${USER}/data/mariadb
+	- rm -rf /home/${USER}/data/wordpress
 
 re: clean build up 
 

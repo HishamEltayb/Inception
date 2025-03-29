@@ -1,5 +1,7 @@
 # Inception Installation Guide for Alpine Linux
 
+# https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts#setup-xorg-base
+
 ## Prerequisites
 Before running the installation script, ensure that you have the following setup:
 
@@ -12,7 +14,7 @@ Before running the installation script, ensure that you have the following setup
 ## Installing Curl
 If `curl` is not installed, you can install it using the following command:
 ```sh
-doas apk add curl
+su -c "apk add curl"
 ```
 
 ## Downloading the Installation Script
@@ -30,7 +32,7 @@ chmod +x install.sh
 ## Running the Installation Script
 Execute the script with superuser privileges:
 ```sh
-doas sh install.sh
+su  -c 'sh install.sh'
 ```
 
 ## Notes

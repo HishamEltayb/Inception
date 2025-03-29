@@ -3,7 +3,7 @@
 # Change the permission for this file before running:
 # chmod +x install.sh
 # Then run it with:
-# doas sh install.sh
+# su -c 'sh install.sh'
 
 # Colors
 RED='\033[0;31m'
@@ -28,11 +28,13 @@ apk update && apk upgrade
 
 # Install necessary packages
 printf "${BLUE}Installing required packages...${NC}\n"
-apk add doas git make curl openssh docker sudo 
+apk add doas git make curl openssh docker docker-cli-compose openrc sudo 
 chmod 664 /etc/sudoers
 sudo addgroup sudo
 sudo adduser "$username" sudo
 sudo adduser root sudo
+
+touch /run/openrc/softlevel
 
 # Configure doas for the user
 printf "${BLUE}Configuring doas for $username...${NC}\n"
@@ -51,10 +53,12 @@ rc-update add docker boot
 addgroup "$username" docker
 service docker start
 
+# sudo chmod 777 /home/${username}
 # Final Message
 printf "${GREEN}Setup completed successfully for user $username!${NC}\n"
 printf "${YELLOW}Please configure your VM to enable port forwarding (guest 42 <-> host 42) in your MAC.${NC}\n"
 printf "${YELLOW}After the reboot, you can start using Docker without doas.${NC}\n"
+
 
 sleep 3
 
