@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadb
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./.env
+    secrets:
+      - DB_PASSWORD
+      - DB_ROOT_PASSWORD
+    networks:
+      - inception
+
+
+#A bridge network creates an internal network within Docker where containers can communicate with each.
+networks:
+  inception:
+    driver: bridge
+
+secrets:
+  DB_PASSWORD:
+    file: ../secrets/db_password.txt
+  DB_ROOT_PASSWORD:
+    file: ../secrets/db_root_password.txt

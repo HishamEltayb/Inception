@@ -1,19 +1,24 @@
 all: build up 
 
 up:
-	docker compose up -d
+	cd srcs && docker compose up -d 
 
 build:
-	docker compose build
+	cd srcs && docker compose build 
 
 down:
-	docker compose down
+	cd srcs && docker compose down 
 
-fclean: down
-	docker compose rm -v
+fclean: clean
+	yes | docker system prune -a 
 
 attach:
-	docker compose exec mariadb /bin/sh
+	docker exec -it mariadb /bin/sh
 
-.PHONY: up build down fclean
+clean: down
+	cd srcs && docker compose rm -v 
+
+re: clean build up 
+
+.PHONY: up build down fclean attach clean re
 

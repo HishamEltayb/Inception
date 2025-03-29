@@ -294,3 +294,16 @@ or if you want to execute commands from outside mariadb server use:
 mysql -u root -p -e "<command>"
 ```   
 
+
+### Starting MariaDB Server (mariadbd)
+The `mariadbd` command (also known as the MariaDB daemon) is the main server process of MariaDB. To start the MariaDB server with specific configuration, you can use this command:
+```bash
+/usr/bin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mariadb/plugin --user=mysql --pid-file=/run/mysqld/mariadb.pid
+```
+
+Command parameters explained:
+- `--basedir=/usr`: Specifies the installation directory
+- `--datadir=/var/lib/mysql`: Location where MariaDB stores its databases
+- `--plugin-dir=/usr/lib/mariadb/plugin`: Directory containing MariaDB plugins
+- `--user=mysql`: Run the server under the mysql user for security
+- `--pid-file=/run/mysqld/mariadb.pid`: File to store the process ID
