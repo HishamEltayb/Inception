@@ -31,17 +31,17 @@ printf "${BLUE}Installing required packages...${NC}\n"
 apk add sudo git make curl openssh docker docker-cli-compose openrc
 apk update
 
-# chmod 664 /etc/sudoers
+chmod 664 /etc/sudoers
 # sudo addgroup sudo
 # sudo adduser "$username" sudo
 # sudo adduser root sudo
 
-# touch /run/openrc/softlevel
+touch /run/openrc/softlevel
 
 
-# # Configure doas for the user
-# printf "${BLUE}Configuring doas for $username...${NC}\n"
-# echo "$username ALL=(ALL) ALL" >> /etc/sudoers
+# Configure doas for the user
+printf "${BLUE}Configuring doas for $username...${NC}\n"
+echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
 # # Configure SSH
 # printf "${BLUE}Configuring SSH on port 42...${NC}\n"
