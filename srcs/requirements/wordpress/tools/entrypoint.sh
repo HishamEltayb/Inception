@@ -1,25 +1,30 @@
 #!/bin/sh
-# sleep 5
-wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
-mkdir -p /var/www/html/wordpress
+
+
+mkdir -p /var/www/html/wordpress 
 cd /var/www/html/wordpress
-# wp --allow-root core download --force 
+
 php -d memory_limit=512M /usr/local/bin/wp --allow-root core download --force
 
+mv /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
 chmod 777 -R /var/www/html/wordpress
-mv wp-config-sample.php wp-config.php
+
+
+WP_USER=$(grep "^WP_USER=" /run/secrets/CREDENTIALS | cut -d "=" -f 2)
+WP_PASS=$(grep "^WP_PASS=" /run/secrets/CREDENTIALS | cut -d "=" -f 2)
+WP_EMAIL=$(grep "^WP_EMAIL=" /run/secrets/CREDENTIALS | cut -d "=" -f 2)
+
+WP_USER2=$(grep "^WP_USER2=" /run/secrets/CREDENTIALS | cut -d "=" -f 2)
+WP_PASS2=$(grep "^WP_PASS2=" /run/secrets/CREDENTIALS | cut -d "=" -f 2)
+WP_EMAIL2=$(grep "^WP_EMAIL2=" /run/secrets/CREDENTIALS | cut -d "=" -f 2)
+
+DB_PASSWORD=$(cat /run/secrets/DB_PASSWORD)
+
 
 sed -i "s/'database_name_here'/'$DB_NAME'/g" wp-config.php
 sed -i "s/'username_here'/'$DB_USER'/g" wp-config.php
 sed -i "s/'password_here'/'$DB_PASSWORD'/g" wp-config.php
-sed -i "s/'localhost'/'mariadb'/g" wp-config.php
-
-sed -i "s|listen = 127.0.0.1:9000|listen = 0.0.0.0:9000|g" /etc/php83/php-fpm.d/www.conf
-
-echo 'listen.owner = nobody' >> /etc/php83/php-fpm.d/www.conf
-echo 'listen.group = nobody' >> /etc/php83/php-fpm.d/www.conf
+sed -i "s/'localhost'/'$DB_HOST'/g" wp-config.php
 
 wp --allow-root --path=/var/www/html/wordpress core install \
     --url='http://localhost' --title='WordPress' \
@@ -32,7 +37,9 @@ wp --allow-root --path=/var/www/html/wordpress user create \
     --user_pass="$WP_PASS2"
 
 
+
 if [ -f /var/www/html/wordpress/wp-config.php ]; then
 	php-fpm83 --nodaemonize
 fi
+
 

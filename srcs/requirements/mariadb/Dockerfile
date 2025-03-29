@@ -6,8 +6,6 @@ RUN apk add mariadb mariadb-client openrc
 
 RUN mkdir -p /run/openrc && touch /run/openrc/softlevel
 
-RUN openrc
-
 COPY conf/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 COPY tools/entrypoint.sh /entrypoint.sh

@@ -1,8 +1,8 @@
 all: build up 
 
 up:
-	mkdir -p /home/$USER/data/mariadb
-	mkdir -p /home/$USER/data/wordpress
+	mkdir -p /Users/${USER}/goinfre/data/mariadb
+	mkdir -p /Users/${USER}/goinfre/data/wordpress
 	cd srcs && docker compose up -d 
 
 build:
@@ -14,13 +14,33 @@ down:
 fclean: clean
 	yes | docker system prune -a 
 
-attach:
+attach-db:
 	docker exec -it mariadb /bin/sh
+
+attach-wp:
+	docker exec -it wordpress /bin/sh
+
+attach-ng:
+	docker exec -it nginx /bin/sh
 
 clean: down
 	cd srcs && docker compose rm -v 
+	- rm -rf /Users/${USER}/goinfre/data/mariadb
+	- rm -rf /Users/${USER}/goinfre/data/wordpress
 
 re: clean build up 
 
-.PHONY: up build down fclean attach clean re
+logs:
+	cd srcs && docker compose logs -f
+
+mariadb-logs:
+	docker logs -f mariadb
+
+wordpress-logs:
+	docker logs -f wordpress
+
+nginx-logs:
+	docker logs -f nginx
+
+.PHONY: up build down fclean attach-mariadb attach-wordpress attach-nginx clean re logs mariadb-logs wordpress-logs nginx-logs
 
