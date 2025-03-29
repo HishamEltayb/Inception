@@ -43,26 +43,26 @@ touch /run/openrc/softlevel
 printf "${BLUE}Configuring doas for $username...${NC}\n"
 echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
-# # Configure SSH
-# printf "${BLUE}Configuring SSH on port 42...${NC}\n"
-# if ! grep -q "Port 42" /etc/ssh/sshd_config; then
-#     echo "Port 42" >> /etc/ssh/sshd_config
-#     rc-service sshd restart
-# fi
+# Configure SSH
+printf "${BLUE}Configuring SSH on port 42...${NC}\n"
+if ! grep -q "Port 42" /etc/ssh/sshd_config; then
+    echo "Port 42" >> /etc/ssh/sshd_config
+    rc-service sshd restart
+fi
 
-# # Configure Docker
-# printf "${BLUE}Configuring Docker...${NC}\n"
-# rc-update add docker boot
-# addgroup "$username" docker
-# service docker start
+# Configure Docker
+printf "${BLUE}Configuring Docker...${NC}\n"
+rc-update add docker boot
+addgroup "$username" docker
+service docker start
 
-# # sudo chmod 777 /home/${username}
-# # Final Message
-# printf "${GREEN}Setup completed successfully for user $username!${NC}\n"
-# printf "${YELLOW}Please configure your VM to enable port forwarding (guest 42 <-> host 42) in your MAC.${NC}\n"
-# printf "${YELLOW}After the reboot, you can start using Docker without doas.${NC}\n"
+# sudo chmod 777 /home/${username}
+# Final Message
+printf "${GREEN}Setup completed successfully for user $username!${NC}\n"
+printf "${YELLOW}Please configure your VM to enable port forwarding (guest 42 <-> host 42) in your MAC.${NC}\n"
+printf "${YELLOW}After the reboot, you can start using Docker without doas.${NC}\n"
 
 
-# sleep 3
+sleep 3
 
-# reboot
+reboot
