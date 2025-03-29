@@ -294,3 +294,22 @@ or if you want to execute commands from outside mariadb server use:
 mysql -u root -p -e "<command>"
 ```   
 
+### **MariaDB Daemon (mariadbd) Command** 🔄
+
+The following command starts the MariaDB database daemon process directly rather than using service management tools like systemd or init scripts:
+
+```bash
+/usr/bin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mariadb/plugin --user=mysql --pid-file=/run/mysqld/mariadb.pid
+```
+
+#### Parameter Explanation
+
+| Parameter | Description |
+|-----------|-------------|
+| `--basedir=/usr` | Specifies the installation directory containing binaries and support files |
+| `--datadir=/var/lib/mysql` | Sets the location where all databases, tables, and data files are stored |
+| `--plugin-dir=/usr/lib/mariadb/plugin` | Defines the directory containing plugin libraries |
+| `--user=mysql` | Runs the daemon as the 'mysql' system user for security purposes |
+| `--pid-file=/run/mysqld/mariadb.pid` | Specifies the file where the process ID is written |
+
+> **Note:** This command launches the MariaDB server process directly without system service management. This is particularly useful in containerized environments like Docker where you typically want direct process execution rather than service management.

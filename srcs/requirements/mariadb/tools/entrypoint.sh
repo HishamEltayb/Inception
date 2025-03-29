@@ -17,5 +17,5 @@ DB_ROOT_PASSWORD=
 
 rc-service mariadb restart
 
-/usr/bin/mariadbd --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/mariadb/plugin --user=mysql --pid-file=/run/mysqld/mariadb.pid
+/usr/bin/mariadbd --basedir=$MARIADB_BASE_DIR   --datadir=$MARIADB_DATABASE_DIR --plugin-dir=$MARIADB_PLUGIN_DIR --user=$MARIADB_USER --pid-file=$MARIADB_PID_FILE
 

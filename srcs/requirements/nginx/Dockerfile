@@ -1,18 +1,14 @@
-FROM alpine:latest
+FROM alpine:3.20
 
-RUN apk update && apk upgrade
-
-RUN apk add --no-cache nginx curl
-
-RUN mkdir -p /data/www 
+RUN apk update && apk add --no-cache nginx openssl
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
-COPY tools/index.html /data/www/index.html
+COPY tools/entrypoint.sh /entrypoint.sh
 
-COPY tools/entrypoint.sh /root/entrypoint.sh
-RUN chmod +x /root/entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-EXPOSE 80
+EXPOSE 443
 
-ENTRYPOINT ["/root/entrypoint.sh"]
+CMD [ "/entrypoint.sh" ]
+

@@ -1,18 +1,11 @@
-FROM alpine:latest
+FROM alpine:3.20
 
-RUN apk update && apk upgrade
+RUN apk update && apk add php php83 php83-fpm php83-mysqli php83-mbstring php83-gd php83-opcache php83-phar php83-xml mariadb-client wget tar
 
-RUN apk add --no-cache nginx curl
+COPY tools/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN mkdir -p /data/www 
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 9000
 
-COPY tools/index.html /data/www/index.html
-
-COPY tools/entrypoint.sh /root/entrypoint.sh
-RUN chmod +x /root/entrypoint.sh
-
-EXPOSE 80
-
-ENTRYPOINT ["/root/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
