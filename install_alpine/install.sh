@@ -28,38 +28,40 @@ apk update && apk upgrade
 
 # Install necessary packages
 printf "${BLUE}Installing required packages...${NC}\n"
-apk add doas git make curl openssh docker docker-cli-compose openrc sudo 
-chmod 664 /etc/sudoers
-sudo addgroup sudo
-sudo adduser "$username" sudo
-sudo adduser root sudo
+apk add sudo git make curl openssh docker docker-cli-compose openrc
+apk update
 
-touch /run/openrc/softlevel
+# chmod 664 /etc/sudoers
+# sudo addgroup sudo
+# sudo adduser "$username" sudo
+# sudo adduser root sudo
 
-# Configure doas for the user
-printf "${BLUE}Configuring doas for $username...${NC}\n"
-echo "$username ALL=(ALL) ALL" >> /etc/sudoers
+# touch /run/openrc/softlevel
 
-# Configure SSH
-printf "${BLUE}Configuring SSH on port 42...${NC}\n"
-if ! grep -q "Port 42" /etc/ssh/sshd_config; then
-    echo "Port 42" >> /etc/ssh/sshd_config
-    rc-service sshd restart
-fi
+# # Configure doas for the user
+# printf "${BLUE}Configuring doas for $username...${NC}\n"
+# echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
-# Configure Docker
-printf "${BLUE}Configuring Docker...${NC}\n"
-rc-update add docker boot
-addgroup "$username" docker
-service docker start
+# # Configure SSH
+# printf "${BLUE}Configuring SSH on port 42...${NC}\n"
+# if ! grep -q "Port 42" /etc/ssh/sshd_config; then
+#     echo "Port 42" >> /etc/ssh/sshd_config
+#     rc-service sshd restart
+# fi
 
-# sudo chmod 777 /home/${username}
-# Final Message
-printf "${GREEN}Setup completed successfully for user $username!${NC}\n"
-printf "${YELLOW}Please configure your VM to enable port forwarding (guest 42 <-> host 42) in your MAC.${NC}\n"
-printf "${YELLOW}After the reboot, you can start using Docker without doas.${NC}\n"
+# # Configure Docker
+# printf "${BLUE}Configuring Docker...${NC}\n"
+# rc-update add docker boot
+# addgroup "$username" docker
+# service docker start
+
+# # sudo chmod 777 /home/${username}
+# # Final Message
+# printf "${GREEN}Setup completed successfully for user $username!${NC}\n"
+# printf "${YELLOW}Please configure your VM to enable port forwarding (guest 42 <-> host 42) in your MAC.${NC}\n"
+# printf "${YELLOW}After the reboot, you can start using Docker without doas.${NC}\n"
 
 
-sleep 3
+# sleep 3
 
-reboot
+# reboot
