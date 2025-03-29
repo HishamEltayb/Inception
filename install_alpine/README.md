@@ -20,7 +20,7 @@ su -c "apk add curl"
 ## Downloading the Installation Script
 To download the installation script, run the following command:
 ```sh
-curl -O https://raw.githubusercontent.com/HishamEltayb/Inception/main/install.sh
+curl -O https://raw.githubusercontent.com/HishamEltayb/Inception/refs/heads/master/install_alpine/install.sh
 ```
 
 ## Setting Up Execution Permissions
