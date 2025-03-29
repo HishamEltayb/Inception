@@ -26,15 +26,21 @@ sed -i "s/'username_here'/'$DB_USER'/g" wp-config.php
 sed -i "s/'password_here'/'$DB_PASSWORD'/g" wp-config.php
 sed -i "s/'localhost'/'$DB_HOST'/g" wp-config.php
 
-wp --allow-root --path=/var/www/html/wordpress core install \
-    --url='http://localhost' --title='WordPress' \
-    --skip-email --admin_email="$WP_EMAIL" \
-    --admin_user="$WP_USER" \
-    --admin_password="$WP_PASS"
+# Check if WordPress is already installed
+if ! wp --allow-root --path=/var/www/html/wordpress core is-installed; then
+    wp --allow-root --path=/var/www/html/wordpress core install \
+        --url='http://localhost' --title='WordPress' \
+        --skip-email --admin_email="$WP_EMAIL" \
+        --admin_user="$WP_USER" \
+        --admin_password="$WP_PASS"
+fi
 
-wp --allow-root --path=/var/www/html/wordpress user create \
-    $WP_USER2 $WP_EMAIL2 --role=subscriber \
-    --user_pass="$WP_PASS2"
+# Check if subscriber user exists before creating
+if ! wp --allow-root --path=/var/www/html/wordpress user list --field=user_login | grep -q "^$WP_USER2$"; then
+    wp --allow-root --path=/var/www/html/wordpress user create \
+        $WP_USER2 $WP_EMAIL2 --role=subscriber \
+        --user_pass="$WP_PASS2"
+fi
 
 
 
