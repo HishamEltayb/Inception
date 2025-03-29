@@ -38,6 +38,7 @@ apk update
 
 # touch /run/openrc/softlevel
 
+
 # # Configure doas for the user
 # printf "${BLUE}Configuring doas for $username...${NC}\n"
 # echo "$username ALL=(ALL) ALL" >> /etc/sudoers
