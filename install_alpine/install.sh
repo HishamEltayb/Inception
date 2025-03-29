@@ -28,14 +28,15 @@ apk update && apk upgrade
 
 # Install necessary packages
 printf "${BLUE}Installing required packages...${NC}\n"
-apk add doas git make curl openssh docker
+apk add doas git make curl openssh docker sudo 
+chmod 664 /etc/sudoers
+sudo addgroup sudo
+sudo adduser "$username" sudo
+sudo adduser root sudo
 
 # Configure doas for the user
 printf "${BLUE}Configuring doas for $username...${NC}\n"
-if ! grep -q "permit :wheel" /etc/doas.conf 2>/dev/null; then
-    echo "permit :wheel" > /etc/doas.conf
-fi
-adduser "$username" wheel
+echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
 # Configure SSH
 printf "${BLUE}Configuring SSH on port 42...${NC}\n"
