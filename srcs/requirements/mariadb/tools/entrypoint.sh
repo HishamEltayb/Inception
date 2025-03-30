@@ -17,8 +17,5 @@ mysql -u $DB_ROOT_USER -p$DB_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
 
 rc-service mariadb stop
 
-# DB_PASSWORD=
-# DB_ROOT_PASSWORD=
-
 /usr/bin/mariadbd --basedir=$MARIADB_BASE_DIR   --datadir=$MARIADB_DATABASE_DIR --plugin-dir=$MARIADB_PLUGIN_DIR --user=$MARIADB_USER --pid-file=$MARIADB_PID_FILE
 

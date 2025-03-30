@@ -1,6 +1,5 @@
 # Inception Installation Guide for Alpine Linux
 
-# https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts#setup-xorg-base
 
 ## Prerequisites
 Before running the installation script, ensure that you have the following setup:
@@ -40,5 +39,12 @@ su  -c 'sh install.sh'
 - Ensure you have the necessary permissions to execute the script
 - Double-check that your VM's network settings are correctly configured before running the script
 - If you encounter any issues, verify that `curl` is properly installed and your VM network ports are correctly mapped
+
+
+
+
+#### **Source**: https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts#setup-xorg-base
+
+#### **ISO**: https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/x86_64/alpine-standard-3.21.3-x86_64.iso
 
 Happy coding! 🚀

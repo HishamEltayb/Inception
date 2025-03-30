@@ -1,1 +1,0 @@
-https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts#setup-xorg-base
