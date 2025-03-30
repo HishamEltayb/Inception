@@ -1,8 +1,8 @@
 all: build up logs
 
 up:
-	mkdir -p /home/${USER}/data/mariadb
-	mkdir -p /home/${USER}/data/wordpress
+	mkdir -p ~/data/mariadb
+	mkdir -p ~/data/wordpress
 	cd srcs && docker compose up -d 
 
 build:
@@ -25,8 +25,8 @@ attach-ng:
 
 clean: down
 	cd srcs && docker compose rm -v 
-	- rm -rf /home/${USER}/data/mariadb
-	- rm -rf /home/${USER}/data/wordpress
+	- rm -rf ~/data/mariadb
+	- rm -rf ~/data/wordpress
 
 re: clean build up 
 
