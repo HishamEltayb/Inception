@@ -1,5 +1,3 @@
-USER := $(shell whoami)
-
 all: build up logs
 
 up:
