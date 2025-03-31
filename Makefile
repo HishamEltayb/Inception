@@ -79,6 +79,11 @@ nginx-logs:
 	@printf "$(BLUE)Showing Nginx logs...$(RESET)\n"
 	@docker logs -f nginx
 
-.PHONY: all create_volumes build up down fclean clean re \
+restart:
+	@printf "$(YELLOW)Restarting containers...$(RESET)\n"
+	@cd srcs && docker compose restart
+	@printf "$(GREEN)Containers restarted successfully!$(RESET)\n"
+
+.PHONY: all create_volumes build up down fclean clean re restart \
         attach-db attach-wp attach-ng logs mariadb-logs wordpress-logs nginx-logs
 
