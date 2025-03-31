@@ -41,7 +41,34 @@ su  -c 'sh install.sh'
 - If you encounter any issues, verify that `curl` is properly installed and your VM network ports are correctly mapped
 
 
+## SSH Configuration (macOS)
 
+To enable easy SSH access to your Alpine VM from your Mac, add the following configuration to your SSH config file:
+
+```ssh-config
+Host alpine-vm
+    HostName localhost
+    User <your-alpine-username>
+    Port 42
+    IdentityFile ~/.ssh/id_rsa
+```
+
+You can add this configuration by running:
+
+```bash
+cat << EOF >> ~/.ssh/config
+Host alpine-vm
+    HostName localhost
+    User <your-alpine-username>
+    Port 42
+    IdentityFile ~/.ssh/id_rsa
+EOF
+```
+
+After adding this configuration, you can connect to your VM simply by running:
+```bash
+ssh alpine-vm
+```
 
 #### **Source**: https://wiki.alpinelinux.org/wiki/Alpine_setup_scripts#setup-xorg-base
 

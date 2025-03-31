@@ -41,11 +41,12 @@ printf "${BLUE}Configuring doas for $username...${NC}\n"
 echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
 # Configure SSH
-printf "${BLUE}Configuring SSH on port 42...${NC}\n"
+printf "${BLUE}Configuring SSH on port 42 with TCP forwarding...${NC}\n"
 if ! grep -q "Port 42" /etc/ssh/sshd_config; then
     echo "Port 42" >> /etc/ssh/sshd_config
-    rc-service sshd restart
 fi
+sed -i 's/AllowTcpForwarding no/AllowTcpForwarding yes/g' /etc/ssh/sshd_config
+rc-service sshd restart
 
 # Configure Docker
 printf "${BLUE}Configuring Docker...${NC}\n"

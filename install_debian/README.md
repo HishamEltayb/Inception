@@ -33,6 +33,35 @@ Execute the script with superuser privileges:
 su -c "bash install.sh"
 ```
 
+## SSH Configuration (macOS)
+
+To enable easy SSH access to your Debian VM from your Mac, add the following configuration to your SSH config file:
+
+```ssh-config
+Host debian-vm
+    HostName localhost
+    User <your-debian-username>
+    Port 42
+    IdentityFile ~/.ssh/id_rsa
+```
+
+You can add this configuration by running:
+
+```bash
+cat << EOF >> ~/.ssh/config
+Host debian-vm
+    HostName localhost
+    User <your-debian-username>
+    Port 42
+    IdentityFile ~/.ssh/id_rsa
+EOF
+```
+
+After adding this configuration, you can connect to your VM simply by running:
+```bash
+ssh debian-vm
+```
+
 ## Notes
 - Ensure you have the necessary permissions to execute the script.
 - Double-check that your VM's network settings are correctly configured before running the script.
