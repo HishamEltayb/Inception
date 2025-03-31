@@ -12,7 +12,7 @@ services:
       - DB_PASSWORD
       - DB_ROOT_PASSWORD
     networks: ["inception"]
-    volumes: ["~/data/mariadb:/var/lib/mysql"]
+    volumes: ["${MARIADB_DIR}:/var/lib/mysql"]
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       interval: 3s
@@ -31,7 +31,7 @@ services:
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
     networks: ["inception"]
-    volumes: ["~/data/wordpress:/var/www/html/wordpress"]
+    volumes: ["${WORDPRESS_DIR}:/var/www/html/wordpress"]
     depends_on:
       wordpress:
         condition: service_healthy
@@ -52,7 +52,7 @@ services:
       - DB_PASSWORD
       - CREDENTIALS
     networks: ["inception"]
-    volumes: ["~/data/wordpress:/var/www/html/wordpress"]
+    volumes: ["${WORDPRESS_DIR}:/var/www/html/wordpress"]
     depends_on:
       mariadb:
         condition: service_healthy
@@ -81,9 +81,9 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ~/data/wordpress
+      device: ${WORDPRESS_DIR}
   mariadb:
     driver_opts:
       o: bind
       type: none
-      device: ~/data/mariadb
+      device: ${MARIADB_DIR}

@@ -5,12 +5,15 @@ YELLOW = \033[0;33m
 RESET = \033[0m
 
 ifeq ($(shell uname),Darwin)
-	MARIADB_DIR := ~/${USER}/data/mariadb
-	WORDPRESS_DIR := ~/${USER}/data/wordpress
+	MARIADB_DIR := /Users/${USER}/goinfre/data/mariadb
+	WORDPRESS_DIR := /Users/${USER}/goinfre/data/wordpress
 else
 	MARIADB_DIR := /home/${USER}/data/mariadb
 	WORDPRESS_DIR := /home/${USER}/data/wordpress
 endif
+
+export MARIADB_DIR
+export WORDPRESS_DIR
 
 all: build up logs
 
