@@ -110,7 +110,7 @@ openssl req -x509 -nodes \
     -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/key.pem \
     -out /etc/nginx/ssl/cert.pem \
-    -subj "/C=MA/ST=BN/L=BN/O=1337/OU=1337/CN=YOUR_DOMAIN"
+    -subj "/C=UN/ST=BN/L=BN/O=42/OU=42/CN=YOUR_DOMAIN"
 ```
 
 #### Certificate Parameters
