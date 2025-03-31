@@ -1,12 +1,14 @@
 #!/bin/sh
 
-
-mkdir -p /var/www/html/wordpress 
+mkdir -p /var/www/html/wordpress
 cd /var/www/html/wordpress
 
-php -d memory_limit=512M /usr/local/bin/wp --allow-root core download --force
+if [ ! -f "wp-config.php" ] && [ ! -f "wp-config-sample.php" ]; then
+    echo "Downloading WordPress..."
+    php -d memory_limit=512M /usr/local/bin/wp --allow-root core download
+    mv wp-config-sample.php wp-config.php
+fi
 
-mv /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php
 chmod 777 -R /var/www/html/wordpress
 
 
@@ -25,17 +27,18 @@ sed -i "s/'database_name_here'/'$DB_NAME'/g" wp-config.php
 sed -i "s/'username_here'/'$DB_USER'/g" wp-config.php
 sed -i "s/'password_here'/'$DB_PASSWORD'/g" wp-config.php
 sed -i "s/'localhost'/'$DB_HOST'/g" wp-config.php
+sed -i "/<?php/a \\if ( isset( \$_SERVER['HTTP_HOST'] ) ) { \\n    \$site_url = 'https://' . \$_SERVER['HTTP_HOST']; \\n    define( 'WP_HOME', \$site_url ); \\n    define( 'WP_SITEURL', \$site_url ); \\n}" wp-config.php
 
-# Check if WordPress is already installed
 if ! wp --allow-root --path=/var/www/html/wordpress core is-installed; then
+    SITE_URL="https://${DOMAIN_NAME:-localhost}"
+    
     wp --allow-root --path=/var/www/html/wordpress core install \
-        --url='http://localhost' --title='WordPress' \
+        --url="${SITE_URL}" --title='WordPress' \
         --skip-email --admin_email="$WP_EMAIL" \
         --admin_user="$WP_USER" \
         --admin_password="$WP_PASS"
 fi
 
-# Check if subscriber user exists before creating
 if ! wp --allow-root --path=/var/www/html/wordpress user list --field=user_login | grep -q "^$WP_USER2$"; then
     wp --allow-root --path=/var/www/html/wordpress user create \
         $WP_USER2 $WP_EMAIL2 --role=subscriber \

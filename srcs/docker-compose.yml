@@ -1,5 +1,3 @@
-# version: '3.1'
-
 services:
   mariadb:
     build: ./requirements/mariadb
@@ -31,7 +29,9 @@ services:
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
     networks: ["inception"]
-    volumes: ["${WORDPRESS_DIR}:/var/www/html/wordpress"]
+    volumes:
+      - "${WORDPRESS_DIR}:/var/www/html/wordpress"
+      - "ssl_certs:/etc"
     depends_on:
       wordpress:
         condition: service_healthy
@@ -87,3 +87,8 @@ volumes:
       o: bind
       type: none
       device: ${MARIADB_DIR}
+  ssl_certs:
+    driver_opts:
+      o: bind
+      type: none
+      device: ${SSL_DIR}
