@@ -1,3 +1,4 @@
+
 services:
   mariadb:
     build: ./requirements/mariadb
@@ -10,7 +11,8 @@ services:
       - DB_PASSWORD
       - DB_ROOT_PASSWORD
     networks: ["inception"]
-    volumes: ["${MARIADB_DIR}:/var/lib/mysql"]
+    volumes:
+      - "mariadb:/var/lib/mysql"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       interval: 3s
@@ -19,28 +21,6 @@ services:
       start_period: 3s
 
   
-  nginx:
-    build: ./requirements/nginx
-    image: nginx
-    container_name: nginx
-    restart: unless-stopped
-    ports: ["443:443"]
-    env_file: .env
-    environment:
-      - DOMAIN_NAME=${DOMAIN_NAME}
-    networks: ["inception"]
-    volumes:
-      - "${WORDPRESS_DIR}:/var/www/html/wordpress"
-      - "ssl_certs:/etc"
-    depends_on:
-      wordpress:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "nginx", "-t"]
-      interval: 3s
-      timeout: 30s
-      retries: 3
-
   wordpress:
     build: ./requirements/wordpress
     image: wordpress
@@ -52,7 +32,8 @@ services:
       - DB_PASSWORD
       - CREDENTIALS
     networks: ["inception"]
-    volumes: ["${WORDPRESS_DIR}:/var/www/html/wordpress"]
+    volumes:
+      - "wordpress:/var/www/html/wordpress"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -63,9 +44,33 @@ services:
       retries: 3
 
 
+  nginx:
+    build: ./requirements/nginx
+    image: nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports: ["443:443"]
+    env_file: .env
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+    networks: ["inception"]
+    volumes:
+      - "wordpress:/var/www/html/wordpress"
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 3s
+      timeout: 30s
+      retries: 3
+
+  
+
 
 networks:
   inception:
+    name: inception
     driver: bridge
 
 secrets:
@@ -77,18 +82,17 @@ secrets:
     file: ../secrets/credentials.txt
 
 volumes:
-  wordpress:
-    driver_opts:
-      o: bind
-      type: none
-      device: ${WORDPRESS_DIR}
   mariadb:
+    name: mariadb
+    driver: local
     driver_opts:
       o: bind
       type: none
       device: ${MARIADB_DIR}
-  ssl_certs:
+  wordpress:
+    name: wordpress
+    driver: local
     driver_opts:
       o: bind
       type: none
-      device: ${SSL_DIR}
+      device: ${WORDPRESS_DIR}

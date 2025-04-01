@@ -4,27 +4,24 @@ RED = \033[0;31m
 YELLOW = \033[0;33m
 RESET = \033[0m
 
+
 ifeq ($(shell uname),Darwin)
 	MARIADB_DIR := /Users/${USER}/goinfre/data/mariadb
 	WORDPRESS_DIR := /Users/${USER}/goinfre/data/wordpress
-	SSL_DIR := /Users/${USER}/goinfre/data/ssl
 else
 	MARIADB_DIR := /home/${USER}/data/mariadb
 	WORDPRESS_DIR := /home/${USER}/data/wordpress
-	SSL_DIR := /home/${USER}/data/ssl
 endif
 
 export MARIADB_DIR
 export WORDPRESS_DIR
-export SSL_DIR
 
-all: build up logs
+all: build up
 
 create_volumes:
 	@printf "$(BLUE)Creating data volumes...$(RESET)\n"
 	@mkdir -p ${MARIADB_DIR}
 	@mkdir -p ${WORDPRESS_DIR}
-	@mkdir -p ${SSL_DIR}
 	@printf "$(GREEN)Volumes created successfully!$(RESET)\n"
 
 build: create_volumes
@@ -42,28 +39,41 @@ down:
 	@cd srcs && docker compose down
 	@printf "$(GREEN)Containers stopped successfully!$(RESET)\n"
 
-fclean: clean
+ifeq ($(shell uname), Darwin)
+fclean:
 	@printf "$(RED)Removing all Docker images...$(RESET)\n"
-	@yes | docker system prune -a
+	@cd srcs && docker compose down -v
+	@yes | docker system prune -af
+	@yes | docker volume prune -f
+	@rm -rf ${MARIADB_DIR}
+	@rm -rf ${WORDPRESS_DIR}
 	@printf "$(GREEN)Clean completed successfully!$(RESET)\n"
+else
+fclean:
+	@printf "$(RED)Removing all Docker images...$(RESET)\n"
+	@cd srcs && docker compose down -v
+	@yes | docker system prune -af
+	@yes | docker volume prune -f
+	@sudo rm -rf ${MARIADB_DIR}
+	@sudo rm -rf ${WORDPRESS_DIR}
+	@printf "$(GREEN)Clean completed successfully!$(RESET)\n"
+endif 
 
 ifeq ($(shell uname), Darwin)
 clean: down
 	@printf "$(YELLOW)Cleaning up containers and volumes...$(RESET)\n"
 	@rm -rf ${MARIADB_DIR}
 	@rm -rf ${WORDPRESS_DIR}
-	@rm -rf ${SSL_DIR}
 	@printf "$(GREEN)Cleanup completed successfully!$(RESET)\n"
 else
 clean: down
 	@printf "$(YELLOW)Cleaning up containers and volumes...$(RESET)\n"
 	@sudo rm -rf ${MARIADB_DIR}
 	@sudo rm -rf ${WORDPRESS_DIR}
-	@sudo rm -rf ${SSL_DIR}
 	@printf "$(GREEN)Cleanup completed successfully!$(RESET)\n"
 endif 
 
-re: clean all
+re: fclean all
 
 attach-db:
 	@printf "$(BLUE)Attaching to MariaDB shell...$(RESET)\n"
@@ -97,6 +107,18 @@ restart:
 	@printf "$(BLUE)Restarting containers...$(RESET)\n"
 	@cd srcs && docker compose restart
 	@printf "$(GREEN)Containers restarted successfully!$(RESET)\n"
+
+ps:
+	@cd srcs && docker compose ps
+
+vol:
+	@docker volume ls
+
+vol-wp:
+	@docker volume inspect wordpress
+
+vol-db:
+	@docker volume inspect mariadb
 
 .PHONY: all create_volumes build up down fclean clean re \
         attach-db attach-wp attach-ng logs mariadb-logs wordpress-logs nginx-logs

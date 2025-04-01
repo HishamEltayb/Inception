@@ -1,11 +1,12 @@
 #!/bin/sh
 
-if [ ! -d "${MARIADB_DATABASE_DIR}/mysql" ]; then
-    openrc
+openrc
+mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld
 
+if [ ! -d "${MARIADB_DATABASE_DIR}/mysql" ]; then
+    
     rc-service mariadb setup
     rc-service mariadb start
-    
 
     
     DB_PASSWORD=$(cat /run/secrets/DB_PASSWORD)
