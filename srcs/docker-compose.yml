@@ -90,11 +90,11 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ${MARIADB_DIR}
+      device: $PWD/data/mariadb
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: ${WORDPRESS_DIR}
+      device: $PWD/data/wordpress
