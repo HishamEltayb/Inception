@@ -6,8 +6,8 @@ RESET = \033[0m
 
 
 ifeq ($(shell uname),Darwin)
-	MARIADB_DIR := /Users/${USER}/goinfre/data/mariadb
-	WORDPRESS_DIR := /Users/${USER}/goinfre/data/wordpress
+	MARIADB_DIR := $PWD/data/mariadb
+	WORDPRESS_DIR := $PWD/data/wordpress
 else
 	MARIADB_DIR := /home/${USER}/data/mariadb
 	WORDPRESS_DIR := /home/${USER}/data/wordpress
@@ -45,6 +45,7 @@ fclean:
 	@cd srcs && docker compose down -v
 	@yes | docker system prune -af
 	@yes | docker volume prune -f
+	@yes | docker network prune -f
 	@rm -rf ${MARIADB_DIR}
 	@rm -rf ${WORDPRESS_DIR}
 	@printf "$(GREEN)Clean completed successfully!$(RESET)\n"
@@ -54,6 +55,7 @@ fclean:
 	@cd srcs && docker compose down -v
 	@yes | docker system prune -af
 	@yes | docker volume prune -f
+	@yes | docker network prune -f
 	@sudo rm -rf ${MARIADB_DIR}
 	@sudo rm -rf ${WORDPRESS_DIR}
 	@printf "$(GREEN)Clean completed successfully!$(RESET)\n"
