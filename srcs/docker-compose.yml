@@ -5,7 +5,8 @@ services:
     image: mariadb
     container_name: mariadb
     restart: unless-stopped
-    ports: ["3306:3306"]
+    expose: 
+      - "3306"
     env_file: .env
     secrets:
       - DB_PASSWORD
@@ -26,7 +27,8 @@ services:
     image: wordpress
     container_name: wordpress
     restart: unless-stopped
-    ports: ["9000:9000"]
+    expose: 
+      - "9000"
     env_file: .env
     secrets:
       - DB_PASSWORD
