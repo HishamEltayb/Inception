@@ -63,19 +63,8 @@ endif
 
 ifeq ($(shell uname), Darwin)
 clean: down
-	@printf "$(YELLOW)Cleaning up containers and volumes...$(RESET)\n"
-	@rm -rf ${MARIADB_DIR}
-	@rm -rf ${WORDPRESS_DIR}
-	@printf "$(GREEN)Cleanup completed successfully!$(RESET)\n"
-else
-clean: down
-	@printf "$(YELLOW)Cleaning up containers and volumes...$(RESET)\n"
-	@sudo rm -rf ${MARIADB_DIR}
-	@sudo rm -rf ${WORDPRESS_DIR}
-	@printf "$(GREEN)Cleanup completed successfully!$(RESET)\n"
-endif 
 
-re: fclean all
+re: clean all
 
 attach-db:
 	@printf "$(BLUE)Attaching to MariaDB shell...$(RESET)\n"
@@ -122,6 +111,6 @@ vol-wp:
 vol-db:
 	@docker volume inspect mariadb
 
-.PHONY: all create_volumes build up down fclean clean re \
+.PHONY: all create_volumes build up down fclean clean re restart\
         attach-db attach-wp attach-ng logs mariadb-logs wordpress-logs nginx-logs
 
